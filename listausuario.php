@@ -6,12 +6,22 @@ include("conectadb.php");
 #função da instrução: LISTAR TODOS O CONTEÚDO DA TABELA usuarios
 $sql = "SELECT * FROM usuarios";
 $resultado = mysqli_query($link, $sql);
+$ativo="s";
 
+if($_SERVER['REQUEST_METHOD']=='POST'){
+    $ativo=$_POST['ativo'];
+    if($ativo=='s'){
+        $sql="SELECT*FROM usuarios WHERE usu_ativo='s'";
+        $resultado=mysqli_query($link, $sql);
+    }
+    else{
+        $sql="SELECT*FROM usuarios WHERE usu_ativo='n'";
+        $resultado=mysqli_query($link,$sql);
+    }
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,8 +33,11 @@ $resultado = mysqli_query($link, $sql);
 
 <body>
     <a href="homesistema.html"><input type="button" id="menuhome" value="HOME SISTEMA"></a>
-    <div class="container">
-        
+    <form action="listausuario.php" method="post">
+        <input type="radio" name="ativo" value="s" required onclick="submit()" <?=$ativo=='s'?"checked":""?>>ATIVO<br>
+        <input type="radio" name="ativo" value="n" required onclick="submit()" <?=$ativo=='s'?"checked":""?>>INATIVO<br>
+</form>
+    <div class="container"> 
         <table border="1">
             <tr>
                 <th>NOME</th>

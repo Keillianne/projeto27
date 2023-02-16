@@ -1,4 +1,3 @@
-
 <?php
 #abre conexão com o banco de dados
 include("conectadb.php");
@@ -7,7 +6,19 @@ include("conectadb.php");
 #função da instrução: LISTAR TODOS O CONTEÚDO DA TABELA usuarios
 $sql = "SELECT * FROM produtos";
 $resultado = mysqli_query($link, $sql);
+$ativo="s";
 
+if($_SERVER['REQUEST_METHOD']=='POST'){
+    $ativo=$_POST['ativo'];
+    if($ativo=='s'){
+        $sql="SELECT*FROM usuarios WHERE usu_ativo='s'";
+        $resultado=mysqli_query($link, $sql);
+    }
+    else{
+        $sql="SELECT*FROM usuarios WHERE usu_ativo='n'";
+        $resultado=mysqli_query($link,$sql);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -19,7 +30,8 @@ $resultado = mysqli_query($link, $sql);
     <title>LISTA PRODUTOS</title>
 </head>
 <body>
-    <a href="homesistema.html"><input type="button" name="voltahomesistema" value="HOME SISTEMA"></p>
+    <a href="homesistema.html"><input type="button" name="voltahomesistema" value="HOME SISTEMA"></a>
+    
     <div class="container">
         
         <table border="1">
@@ -41,7 +53,8 @@ $resultado = mysqli_query($link, $sql);
                         <td><?= $tbl[2]?></td>
                         <td><?= $tbl[3]?></td>
                         <td><?= $tbl[4]?></td> 
-                        <!---<td><?= $check=($tbl[3]=="s")?"SIM":"NÃO"?></td>--->
+                        <td><a href="alterarproduto.php?id=<?= $tbl[0]?>"><input type="button" value="ALTERAR"></a></td>
+                        <!---<td><?= $check=($tbl[6]=="s")?"SIM":"NÃO"?></td>--->
                     </tr>
                     <?php
                 }
