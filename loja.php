@@ -8,17 +8,6 @@ $sql = "SELECT * FROM produtos";
 $resultado = mysqli_query($link, $sql);
 $ativo="s";
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    $ativo=$_POST['ativo'];
-    if($ativo=='s'){
-        $sql="SELECT*FROM usuarios WHERE usu_ativo='s'";
-        $resultado=mysqli_query($link, $sql);
-    }
-    else{
-        $sql="SELECT*FROM usuarios WHERE usu_ativo='n'";
-        $resultado=mysqli_query($link,$sql);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -27,11 +16,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="newestilo.css">
-    <title>LISTA PRODUTOS</title>
+    <title>LOJA DO PROJETO</title>
 </head>
 <body>
-    <a href="homesistema.html"><input type="button" name="voltahomesistema" value="HOME SISTEMA"></a>
-    
+    <form action="loja.php" method="post"> </form>
     <div class="container">
         
         <table border="1">
@@ -41,8 +29,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     <th>DESCRIÇÃO</th>
                     <th>QUANTIDADE</th>
                     <th>PRECO</th>
-                    <th>ALTERAR</th>
-                    <th>ATIVO</th>
+                    <th>ADICIONAR AO CARRINHO</th>
             </tr>
             <?php
                 #Preenchimento da tabela com os dados do banco
@@ -50,13 +37,14 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     ?>
                     <tr>
                         <td><?= $tbl[0]?></td>
-                        <td><?= $tbl[4]?></td>
                         <td><?= $tbl[1]?></td>
                         <td><?= $tbl[2]?></td>
+                        <td><input type="number" name="quantidade" id="quantidade"></td>
                         <!-- linha abaixo converte formato da $tbl[3] usando 2 casas após a virgula e aplicando , ao lugar de ponto -->
                         <td>R$ <?= number_format($tbl[3],2,',','.')?></td>
-                        <td><img src="img"
-                        <td><a href="alteraproduto.php?id=<?= $tbl[0]?>"><input type="button" value="ALTERAR"></a></td>
+                        <td>R$ <?= number format
+                        <td><div><img src=
+                        <td><a href="addcarrinho.php?id=<?= $tbl[0] && $quantidade?>"><input type="button" value="ADICIONAR PRODUTO"></a></td>
                         <!-- tbl[5] verifica se é s que está vindo do banco de dados, se sim. Escreva SIM senão escreva NÃO -->
                         <td><?= $check = ($tbl[5] == 's')?"SIM":"NÃO"?></td>
                     </tr>

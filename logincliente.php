@@ -3,22 +3,23 @@
 #
 #CAPTURA VARIÁVEIS UTILIZANDO O MÉTODO POST
 if($_SERVER['REQUEST_METHOD']=="POST"){
-    $nome = $_POST['nome']; #captura varíavel que está no name="nome" html
+    $cpf = $_POST['cpf']; #captura varíavel que está no name="nome" html
     $password = $_POST['password']; #captura variável que está no name="password" html
     include("conectadb.php"); #include chama a conexão com o banco de dados no script conectadb.php
 
     #CONSULTA SQL PARA VERIFICAR USUARIO CADASTRADO
     #instrução de comunicação com o banco de dados
-    $sql = "SELECT COUNT(usu_id) FROM usuarios WHERE usu_nome = '$nome' AND usu_senha ='$password'";
+    $sql = "SELECT COUNT(cli_id) FROM clientes WHERE cli_cpf = '$cpf' AND cli_senha ='$password' AND cli_ativo = 's'";
     #coleta o valor da consulta e cria um array para armazenar
     $resultado = mysqli_query($link,$sql);
+    echo($sql);
     while($tbl = mysqli_fetch_array($resultado)){
         $cont = $tbl[0]; #armazena o valor da coluna no caso a [0]
     }
     #Verifica se o resultado do cont é 0 ou 1
     #Se 0 o Usuario ou Senha estão incorretos
     if($cont==1){
-        header("Location: homesistema.html"); #Se usuario e senha corretos, vá para homesistema
+        header("Location: loja.php"); #Se usuario e senha corretos, vá para homesistema
     }
     else{
         echo"<script>window.alert('USUARIOS OU SENHA INCORRETOS!');</script>"; # se incorreto apresenta o erro
@@ -35,7 +36,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGIN USUARIOS</title>
+    <title>LOGIN CLIENTES</title>
     <link rel="stylesheet" href="newestilo.css">
 </head>
 <body>
@@ -55,9 +56,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     </script>
     <!-- FIM DO SCRIPT PARA MOSTRA SENHA -->
 
-        <form action="login.php" method="POST">
-            <h1>LOGIN DE USUARIO</h1>
-            <input type="text" name="nome" id="nome" placeholder="Nome">
+        <form action="logincliente.php" method="POST">
+            <h1>LOGIN CLIENTE</h1>
+            <input type="text" name="cpf" id="nome" placeholder="CPF">
             <p></p>
             <input type="password" id="senha" name="password" placeholder="Senha">
             <!-- abaixo está a função onclick chamando o script de javascript Il VVVVVVVVV -->
