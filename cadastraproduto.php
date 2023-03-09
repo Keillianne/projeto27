@@ -5,11 +5,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $descricao = $_POST['descricao'];
     $quantidade = $_POST['quantidade'];
     $preco = $_POST['preco'];
-    $foto1=$_POST['foto1'];
-    #$foto2=$_POST['foto2'];
-
-    // if ($foto=="") 
-    // $img="semfoto.png";
+    
+    #criptografar a foto para o banco de dados
+    
+    if(isset($_FILES['imagem']) && $_FILES['imagem']['error']===UPLOAD_ERR_OK){
+        $imagem_temp= $_FILES['imagem']['tmp_name'];
+        $imagem= file_get_contents($imagem_temp);
+        $imagem_base64=base64_encode($imagem);
+    }
 
     include("conectadb.php");
     #verifica se o produto está cadastrado
@@ -23,9 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($cont == 1) {
         echo "<script>window.alert('PRODUTO JÁ CADASTRADO!');</script>";
     } else {
-        $sql = "INSERT INTO produtos (pro_nome, pro_descricao, pro_quantidade, pro_preco) VALUES('$nome', '$descricao', '$quantidade', '$preco')";
+        $sql = "INSERT INTO produtos (pro_nome, pro_descricao, pro_quantidade, pro_preco, imagem1) VALUES('$nome', '$descricao', '$quantidade', '$preco', '$imagem_base64')";
         mysqli_query($link, $sql);
-        echo($cont);
+        
         header("Location: listaproduto.php");
     }
 }
@@ -42,22 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>CADASTRAR PRODUTOS</title>
 </head>
 <body>
-        <!---<a href="homesistema.html"><input type="button" name="voltahomesistema" value="HOME SISTEMA"></p></a>
-        <form action="cadastraproduto.php" method="post">
-        <h1>CADASTRO DE PRODUTOS</h1>
-        <input type="text" name="nome" id="nome" placeholder="NOME" required>
-        <p></p>
-        <input type="text" name="descricao" id="descricao" placeholder="DESCRIÇÃO" required>
-        <p></p>
-        <input type="number" name="quantidade" id="quantidade" placeholder="QUANTIDADE" required>
-        <p></p>
-        <input type="number" name="preco" id="preco" placeholder="PREÇO" required>
-        <p></p>
-        <input type="submit" name="cadastrar" id="cadastrar" value="CADASTRAR">
-    </form> --->
-    <a href="homesistema.html"><input type="button" id="menuhome" value="HOME SISTEMA"></a>
+        <a href="homesistema.html"><input type="button" id="menuhome" value="HOME SISTEMA"></a>
         <div>
-            <form action="cadastraproduto.php" method="post">
+            <form action="cadastraproduto.php" method="post" enctype="multipart/form-data">
                 <label>NOME</label>
                 <input type="text" name="nome">
                 <br></br>
@@ -74,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- BLOCO DE CÓDIGO NOVO -->
                 
                 <label>IMAGEM</label>
-                <input type="file" name="foto1" id="img1" onchange="foto1()">
-                <img src="img/semfoto.png" width="100px" id="foto1a">
+                <input type="file" name="imagem" id="img1"> 
+                
 
                 <br>
                 <input type="submit" value="CADASTRAR">
